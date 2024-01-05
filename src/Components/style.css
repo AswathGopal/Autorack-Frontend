@@ -1,0 +1,8 @@
+.backgroundImage {
+    background-image: url('../../public/Images/UI_design.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    /* max-height: fit-content; */
+    /* z-index: -1; */
+}
