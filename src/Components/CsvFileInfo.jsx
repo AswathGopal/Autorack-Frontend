@@ -1,29 +1,15 @@
 import "./style.css";
 import React from "react";
-import { useState ,useEffect} from "react";
+import { useState } from "react";
 import { Link ,useParams} from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { InputNumber } from "primereact/inputnumber";
+import PostReq from "./PostReq";
 const CsvFileInfo = () => {
  const { id } = useParams();
-  const data = [
-    {
-      csv_file_serial_num: "1",
-      creation_time: "12:20:37",
-      x_distance: "200",
-      servo_angle: "180",
-      max_deflection: "1180",
-    },
-    {
-      csv_file_serial_num: "2",
-      creation_time: "12:20:37",
-      x_distance: "30",
-      servo_angle: "190",
-      max_deflection: "1180",
-    },
-  ];
+  
   const [RodData, setRodData] = useState({
     serialnumber: "",
     DateFrom: "",
@@ -45,18 +31,9 @@ const CsvFileInfo = () => {
     formData.append("TimeFrom", RodData.TimeFrom);
     formData.append("TimeTo", RodData.TimeTo);
     console.log(formData);
-    // dei ithu vanthu form input data ku entha route set pannaume set panni data receive pannidu
-    // fetch("http://localhost:8000/fetch-csv-file-info/", {
-    //   method: "POST",
-    //   body: formData,
-    // })
-    //   .then((response) =>console.log("response", response.json()))
-    //   .then((data) => {
-    //     console.log(data);
-    //     setReceivedData(data);
-    //     setLoading(true);
-    //   });
-  };
+    setReceivedData(PostReq("fetch-csv-file-info/", formData))
+    setLoading(true);
+  }
    const [filters, setFilters] = useState({
      distance: {
        operator: FilterOperator.AND,
@@ -177,8 +154,8 @@ const CsvFileInfo = () => {
           </form>
         </div>
         <div className="mt-3 mb-5 ">
-          <DataTable
-            value={data}
+          {Loading &&(<DataTable
+            value={receivedData}
             // paginator
             // rows={1}
             // rowsPerPageOptions={[1,5, 10, 25, 50]}
@@ -230,7 +207,7 @@ const CsvFileInfo = () => {
               body={actionTemplate}
               className="border-b px-4"
             ></Column>
-          </DataTable>
+          </DataTable>)}
         </div>
       </div>
     </div>

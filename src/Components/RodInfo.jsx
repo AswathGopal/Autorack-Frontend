@@ -1,23 +1,12 @@
 import './style.css'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState} from 'react';
-import { Link ,useParams} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import PostReq from './PostReq';
 const RodInfo = () => {
-  const   data = [
-      {
-        component_serial_num:"1",
-        start_time: "12:20:37",
-        end_time: "9.80.27",
-      },
-      {
-          component_serial_num: "2",
-          start_time: "12.50.34",
-          end_time: "08:45:56"
-      },
-    ];
+
     const [RodData,setRodData] = useState({
         serialnumber:"",
         DateFrom:"",
@@ -37,24 +26,9 @@ const RodInfo = () => {
       formData.append("timefrom", RodData.TimeFrom);
       formData.append("timeto", RodData.TimeTo);
       console.log(formData);
+      setReceivedData(PostReq("fetch-components/", formData))
       setLoading(true);
-      // dei ithu vanthu form input data ku entha route set pannaume set panni data receive pannidu
-    //   fetch("http://localhost:8000/fetch-components/", {
-    //     method: "POST",
-    //     body: formData,
-    //   })
-    //     .then((response) =>console.log("response", response))
-    //     .then((data) => {
-    //       console.log("data",data);
-    //       setReceivedData(data);
-          
-    //     });
-    // };
-      setReceivedData(PostReq("http://localhost:8000/fetch-components/", formData))
     }
-    useEffect(()=>{
-      console.log(receivedData);
-    }, [receivedData])
     const actionTemplate = (rowData) => {
       const id = rowData.component_serial_num;
       return (
@@ -154,7 +128,7 @@ const RodInfo = () => {
         </div>
         <div className="mt-3 mb-5 ">
          {Loading &&(<DataTable
-            value={data}
+            value={receivedData}
             // paginator
             // rows={1}
             // rowsPerPageOptions={[1,5, 10, 25, 50]}

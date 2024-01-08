@@ -1,16 +1,16 @@
 import React from 'react'
 import { Line } from 'react-chartjs-2'
-import { useLocation } from 'react-router-dom';
 import "chart.js/auto";
+import GetReq from './GetReq';
+import { useEffect,useState } from 'react';
+import { useParams } from 'react-router-dom';
 const Graph = () => {
-     const data=[{
-      angle: ["1","2","3"],
-      lvdt_1:["1123","2234","2313"],
-      lvdt_2:["2445","3452","5432"],
-      lvdt_3:["2561","6532","3421"],
-      lvdt_4:["3452","2341","3456"]
-    }];
-    const parsedData = data.map((item) => {
+   const { id } = useParams();
+   const [receivedData, setReceivedData] = useState([]);
+    useEffect(() => {
+      setReceivedData(GetReq(id));
+    }, []);
+     const parsedData = receivedData.map((item) => {
       return {
         angle: item.angle.map((value) => parseInt(value, 10)),
         lvdt_1: item.lvdt_1.map((value) => parseInt(value, 10)),
@@ -20,7 +20,6 @@ const Graph = () => {
       };
     });
 
-    console.log(parsedData[0].angle);
     const state = {
       labels: parsedData[0].angle,
       datasets: [
@@ -90,16 +89,6 @@ const Graph = () => {
         display: true,
         position: 'left',
       },
-      // y1: {
-      //   type: 'linear',
-      //   display: true,
-      //   position: 'right',
-
-        // grid line settings
-      //   grid: {
-      //     drawOnChartArea: false, // only want the grid lines for one axis to show up
-      //   },
-      // },
     }
         }}
         width={500}

@@ -1,5 +1,5 @@
 export default async function(getData){
-    const response= await fetch(`https://localhost:8000/apis?id=${getData}`, {
+    const response= await fetch(`https://localhost:8000/apis/file-data-page?id=${getData}`, {
         method: 'get'
     })
     return await (()=>{
