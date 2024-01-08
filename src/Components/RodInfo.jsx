@@ -1,9 +1,10 @@
 import './style.css'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState} from 'react';
 import { Link ,useParams} from 'react-router-dom';
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import PostReq from './PostReq';
 const RodInfo = () => {
   const   data = [
       {
@@ -30,15 +31,15 @@ const RodInfo = () => {
       e.preventDefault();
       console.log(RodData);
       const formData = new FormData();
-      formData.append("SerialNo", RodData.serialNo);
-      formData.append("DateFrom", RodData.DateFrom);
-      formData.append("DateTo", RodData.DateTo);
-      formData.append("TimeFrom", RodData.TimeFrom);
-      formData.append("TimeTo", RodData.TimeTo);
+      formData.append("serialnumber", RodData.serialnumber);
+      formData.append("datefrom", RodData.DateFrom);
+      formData.append("dateto", RodData.DateTo);
+      formData.append("timefrom", RodData.TimeFrom);
+      formData.append("timeto", RodData.TimeTo);
       console.log(formData);
       setLoading(true);
       // dei ithu vanthu form input data ku entha route set pannaume set panni data receive pannidu
-    //   fetch("http://localhost:8000/", {
+    //   fetch("http://localhost:8000/fetch-components/", {
     //     method: "POST",
     //     body: formData,
     //   })
@@ -49,16 +50,11 @@ const RodInfo = () => {
           
     //     });
     // };
-    // Dei ithu vanthu id send panrathuku athu enda route la set pannanumo panniru
-    //  function sendId (itemid){
-    //      const formData = new FormData();
-    //      formData.append("id", itemid);
-    //      console.log(formData)
-    //      fetch("http://localhost:8000/fetch-components/", {
-    //        method: "POST",
-    //        body: formData,
-    //      }).then((response) => console.log(response.json()));
+      setReceivedData(PostReq("http://localhost:8000/fetch-components/", formData))
     }
+    useEffect(()=>{
+      console.log(receivedData);
+    }, [receivedData])
     const actionTemplate = (rowData) => {
       const id = rowData.component_serial_num;
       return (
@@ -174,3 +170,4 @@ const RodInfo = () => {
   );
 };
 export default RodInfo
+

@@ -46,7 +46,7 @@ const CsvFileInfo = () => {
     formData.append("TimeTo", RodData.TimeTo);
     console.log(formData);
     // dei ithu vanthu form input data ku entha route set pannaume set panni data receive pannidu
-    // fetch("http://localhost:8000/fetch-csv-file/", {
+    // fetch("http://localhost:8000/fetch-csv-file-info/", {
     //   method: "POST",
     //   body: formData,
     // })
