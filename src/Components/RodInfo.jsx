@@ -1,7 +1,7 @@
 import './style.css'
 import React from 'react'
 import { useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link ,useParams} from 'react-router-dom';
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 const RodInfo = () => {
@@ -150,7 +150,6 @@ const RodInfo = () => {
               <button
                 type="submit"
                 className="btn btn-success w-100"
-                onClick={handleSubmit}
               >
                 Submit
               </button>
@@ -158,31 +157,6 @@ const RodInfo = () => {
           </form>
         </div>
         <div className="mt-3 mb-5 ">
-          {/* <table className="min-w-full bg-white border border-gray-300 rounded">
-            <thead>
-              <tr className="bg-gray-200 ">
-                <th className="py-2 px-4 border-b">Component Serial Number</th>
-                <th className="py-2 px-4 border-b">Start Time</th>
-                <th className="py-2 px-4 border-b">End Time</th>
-                <th className="py-2 px-4 border-b">action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((d) => (
-                <tr className="bg-gray-100">
-                  <td className="py-2 px-4 border-b">
-                    {d.component_serial_num}
-                  </td>
-                  <td className="py-2 px-4 border-b">{d.start_time}</td>
-                  <td className="py-2 px-4 border-b">{d.end_time}</td>
-                  <td className="py-2 px-4 border-b">
-                    <button className="btn btn-info btn-sm px-3">click</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
-          {/* the below is prime react table */}
          {Loading &&(<DataTable
             value={data}
             // paginator

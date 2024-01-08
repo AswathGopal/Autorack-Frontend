@@ -1,13 +1,13 @@
 import "./style.css";
 import React from "react";
-import { useState ,useRef,useEffect} from "react";
-import { Link } from "react-router-dom";
+import { useState ,useEffect} from "react";
+import { Link ,useParams} from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { InputNumber } from "primereact/inputnumber";
 const CsvFileInfo = () => {
- 
+ const { id } = useParams();
   const data = [
     {
       csv_file_serial_num: "1",
@@ -33,17 +33,12 @@ const CsvFileInfo = () => {
   });
   const [receivedData, setReceivedData] = useState([]);
   const [Loading, setLoading] = useState(false);
-  const tableRef = useRef(null);
-  //  const {Download}=useDownloadExcel({
-  //    currentTableRef: tableRef.current,
-  //    filename: "Users table",
-  //    sheet: "Users",
-  //  });
   
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(RodData);
     const formData = new FormData();
+    formData.append("cmpserialno",id)
     formData.append("SerialNo", RodData.serialNo);
     formData.append("DateFrom", RodData.DateFrom);
     formData.append("DateTo", RodData.DateTo);
@@ -182,50 +177,8 @@ const CsvFileInfo = () => {
           </form>
         </div>
         <div className="mt-3 mb-5 ">
-          {/* <table className="min-w-full bg-white border border-gray-300 rounded">
-            <thead>
-              <tr className="bg-gray-200 ">
-                <th className="py-2 px-4 border-b">CsvFile Serial Number</th>
-                <th className="py-2 px-4 border-b">Creation Time</th>
-                <th className="py-2 px-4 border-b">X Distance</th>
-                <th className="py-2 px-4 border-b">Servo Angle</th>
-                <th className="py-2 px-4 border-b">Max Deflection</th>
-                <th className="py-2 px-4 border-b">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((d) => (
-                <tr className="bg-gray-100">
-                  <td className="py-2 px-4 border-b">
-                    {d.csv_file_serial_num}
-                  </td>
-                  <td className="py-2 px-4 border-b">{d.creation_time}</td>
-                  <td className="py-2 px-4 border-b">{d.x_distance}</td>
-                  <td className="py-2 px-4 border-b">{d.servo_angle}</td>
-                  <td className="py-2 px-4 border-b">{d.max_deflection}</td>
-                  <td className="py-2 px-4 border-b">
-                    <Link
-                      to={`/csvfiledata/${d.csv_file_serial_num}`}
-                      className="btn btn-info btn-sm px-3"
-                    >
-                      click
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
-
-          {/* <DownloadTableExcel
-            filename="users table"
-            sheet="users"
-            currentTableRef={tableRef.current.getElement()}
-          >
-            <button> Export excel </button>
-        </DownloadTableExcel> */}
           <DataTable
             value={data}
-            ref={tableRef}
             // paginator
             // rows={1}
             // rowsPerPageOptions={[1,5, 10, 25, 50]}
@@ -256,12 +209,20 @@ const CsvFileInfo = () => {
               field="servo_angle"
               header="Servo Angle"
               className="border-b"
+              dataType="numeric"
+              style={{ minWidth: "10rem" }}
+              filter
+              filterElement={distanceFilterTemplate}
               sortable
             />
             <Column
               field="max_deflection"
               header="Max Deflection"
               className="border-b px-4"
+              dataType="numeric"
+              style={{ minWidth: "10rem" }}
+              filter
+              filterElement={distanceFilterTemplate}
               sortable
             />
             <Column

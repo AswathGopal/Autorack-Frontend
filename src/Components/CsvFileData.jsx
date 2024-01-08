@@ -12,7 +12,6 @@ import { Button } from "primereact/button";
 import Graph from "./Graph.jsx";
 const CsvFileData = () => {
   const {id} =  useParams()
-  // const navigate = useNavigate()
   const data = [
     {
       angle: ["1","2","3"],
@@ -30,7 +29,12 @@ const CsvFileData = () => {
       lvdt_4: item.lvdt_4[index],
     }))
   );
-  const [filters, setFilters] = useState({distance: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] }});
+  // const [filters, setFilters] = useState({
+  //   distance: {
+  //     operator: FilterOperator.AND,
+  //     constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+  //   },
+  // });
   useEffect(()=>
     {
       // Dei ithu vanthu id send panrathuku athu enda route la set pannanumo panniru
@@ -43,11 +47,6 @@ const CsvFileData = () => {
     },
     []
   );
-  // const SendData=()=>{
-  //     console.log("hello")
-  //     return <Graph data={data}/>
-
-  // }
   const distanceFilterTemplate = (options)=>{
     
     return  <InputNumber
@@ -60,14 +59,14 @@ const CsvFileData = () => {
           placeholder="Search"
         />
         };
-  
+
 
  
   return (
     <div className="min-h-screen backgroundImage ">
       <div className="flex justify-end ">
         <Link
-         to={{ pathname: '/graph', state: { data: data } }}
+          to={`/graph/${id}`}
           className="btn btn-success btn-sm px-3 py-2 mt-5 mr-8"
         >
           Show graph
@@ -75,39 +74,60 @@ const CsvFileData = () => {
       </div>
       <div className="flex flex-col justify-center items-center  ">
         <div className="mt-10 ">
-          {/* <table className="min-w-full bg-white border border-gray-300 rounded">
-            <thead>
-              <tr className="bg-gray-200 ">
-                <th className="py-2 px-4 border-b">Component Serial Number</th>
-                <th className="py-2 px-4 border-b">Start Time</th>
-                <th className="py-2 px-4 border-b">End Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((d) => (
-                <tr className="bg-gray-100">
-                  <td className="py-2 px-4 border-b">
-                    {d.component_serial_num}
-                  </td>
-                  <td className="py-2 px-4 border-b">{d.start_time}</td>
-                  <td className="py-2 px-4 border-b">{d.end_time}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table> */}
-          {/* the below is prime react table */}
-          <CSVLink data={data}>Download me</CSVLink>
+          <div className="btn btn-success btn-sm py-2 px-4 text-white mb-4">
+            <CSVLink data={data}  className="text-white"  style={{ textDecoration: 'none', color: 'inherit' }}>Download csv</CSVLink>
+          </div>
           <DataTable
             value={flattenedData}
             // paginator
             // rows={1}
             // rowsPerPageOptions={[1,5, 10, 25, 50]}
           >
-            <Column field="angle" header="Angle" sortable />
-            <Column field="lvdt_1" header="LVDT 1" sortable />
-            <Column field="lvdt_2" header="LVDT 2" sortable />
-            <Column field="lvdt_3" header="LVDT 3" sortable />
-            <Column field="lvdt_4" header="LVDT 4" sortable />
+            <Column
+              field="angle"
+              header="Angle"
+              sortable
+              dataType="numeric"
+              style={{ minWidth: "10rem" }}
+              filter
+              filterElement={distanceFilterTemplate}
+            />
+            <Column
+              field="lvdt_1"
+              header="LVDT 1"
+              sortable
+              dataType="numeric"
+              style={{ minWidth: "10rem" }}
+              filter
+              filterElement={distanceFilterTemplate}
+            />
+            <Column
+              field="lvdt_2"
+              header="LVDT 2"
+              sortable
+              dataType="numeric"
+              style={{ minWidth: "10rem" }}
+              filter
+              filterElement={distanceFilterTemplate}
+            />
+            <Column
+              field="lvdt_3"
+              header="LVDT 3"
+              sortable
+              dataType="numeric"
+              style={{ minWidth: "10rem" }}
+              filter
+              filterElement={distanceFilterTemplate}
+            />
+            <Column
+              field="lvdt_4"
+              header="LVDT 4"
+              sortable
+              dataType="numeric"
+              style={{ minWidth: "10rem" }}
+              filter
+              filterElement={distanceFilterTemplate}
+            />
           </DataTable>
         </div>
       </div>
