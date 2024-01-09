@@ -4,19 +4,16 @@ import "chart.js/auto";
 import GetReq from './GetReq';
 import { useEffect,useState } from 'react';
 import { useParams } from 'react-router-dom';
-const Graph = () => {
+const Graph = (props) => {
+  const data= props.data
    const { id } = useParams();
-   const [receivedData, setReceivedData] = useState([]);
-    useEffect(() => {
-      setReceivedData(GetReq(id));
-    }, []);
-     const parsedData = receivedData.map((item) => {
+     const parsedData = data.map((item) => {
       return {
-        angle: item.angle.map((value) => parseInt(value, 10)),
-        lvdt_1: item.lvdt_1.map((value) => parseInt(value, 10)),
-        lvdt_2: item.lvdt_2.map((value) => parseInt(value, 10)),
-        lvdt_3: item.lvdt_3.map((value) => parseInt(value, 10)),
-        lvdt_4: item.lvdt_4.map((value) => parseInt(value, 10)),
+        angle: item['Angle(Deg) '].map((value) => parseInt(value, 10)),
+        lvdt_1: item['LVDT_1(Micron)'].map((value) => parseInt(value, 10)),
+        lvdt_2: item['LVDT_2(Micron)'].map((value) => parseInt(value, 10)),
+        lvdt_3: item['LVDT_3(Micron)'].map((value) => parseInt(value, 10)),
+        lvdt_4: item['LVDT_4(Micron)'].map((value) => parseInt(value, 10)),
       };
     });
 

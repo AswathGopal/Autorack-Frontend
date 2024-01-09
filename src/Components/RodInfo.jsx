@@ -1,10 +1,11 @@
 import './style.css'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState} from 'react';
 import { Link } from 'react-router-dom';
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import PostReq from './PostReq';
+import {modifyTimestamp2} from './UtcToIst'
+
 const RodInfo = () => {
 
     const [RodData,setRodData] = useState({
@@ -16,7 +17,7 @@ const RodInfo = () => {
     });
     const [receivedData,setReceivedData]= useState([])
     const [Loading,setLoading] = useState(false)
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
       e.preventDefault();
       console.log(RodData);
       const formData = new FormData();
@@ -26,9 +27,24 @@ const RodInfo = () => {
       formData.append("timefrom", RodData.TimeFrom);
       formData.append("timeto", RodData.TimeTo);
       console.log(formData);
-      setReceivedData(PostReq("fetch-components/", formData))
-      setLoading(true);
+      const resp = await fetch('http://localhost:8000/apis/fetch-components/', {
+        method : "post",
+        body: formData
+      })
+      console.log(resp);
+      const data= await resp.json()
+      console.log(data);
+      if (Array.isArray(data)) {
+        data.forEach((item) => {
+          item.start_time = modifyTimestamp2(item.start_time)
+          item.end_time= modifyTimestamp2(item.end_time)
+        });
+      }
+      setReceivedData(data)
     }
+    useEffect(()=>{
+      console.log("printed "+receivedData);
+    },[receivedData])
     const actionTemplate = (rowData) => {
       const id = rowData.component_serial_num;
       return (
@@ -127,7 +143,7 @@ const RodInfo = () => {
           </form>
         </div>
         <div className="mt-3 mb-5 ">
-         {Loading &&(<DataTable
+         <DataTable
             value={receivedData}
             // paginator
             // rows={1}
@@ -137,7 +153,7 @@ const RodInfo = () => {
             <Column field="start_time" header="Start Time" sortable />
             <Column field="end_time" header="End time" sortable />
             <Column header="Action" body={actionTemplate}></Column>
-          </DataTable>)}    
+          </DataTable>    
         </div>
       </div>
     </div>

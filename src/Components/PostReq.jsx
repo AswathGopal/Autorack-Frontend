@@ -6,11 +6,13 @@ export default async function(path, postData){
         body: postData
     })
     const data = await (()=>{
-        if(response.ok)
+        if(response.ok){
             return response.json()
+        }
         else
             return response.text()
     })()
+    console.log(data);
     return data
 }
 /* from backend to frontend:

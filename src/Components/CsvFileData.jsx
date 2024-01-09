@@ -8,32 +8,65 @@ import {Column}  from 'primereact/column'
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { InputNumber } from "primereact/inputnumber";
 import { CSVLink} from "react-csv";
-import GetReq from "./GetReq.jsx";
+import Graph from "./Graph";
+
 const CsvFileData = () => {
+  const [clicked,setClicked]=useState(false)
+  const [originaldata, setoriginalData] = useState([]);
+  const ButtonClick=()=>{
+  setClicked(true)
+}
   const {id} =  useParams()
   const [receivedData,setReceivedData]=useState([])
  
-  const flattenedData = receivedData.flatMap((item) =>
-    item.angle.map((_, index) => ({
-      angle: item.angle[index],
-      lvdt_1: item.lvdt_1[index],
-      lvdt_2: item.lvdt_2[index],
-      lvdt_3: item.lvdt_3[index],
-      lvdt_4: item.lvdt_4[index],
-    }))
-  );
+  
   const [filters, setFilters] = useState({
     distance: {
       operator: FilterOperator.AND,
       constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
     },
   });
-  useEffect(()=>
-    {
-      setReceivedData(GetReq(id))
-    },
-    []
-  );
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(`http://localhost:8000/apis/file-data-page?id=${id}`, {
+          method: "GET",
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("data",data)
+        setoriginalData(data)
+         if (!data || data.length === 0) {
+           // Handle the case where the data is empty or not in the expected format
+           console.error("Invalid data structure");
+           return;
+         }
+
+         const flattenedData = data[0]['Angle(Deg) '].map((_, index) => ({
+           angle: data[0]['Angle(Deg) '][index],
+           LVDT_1: data[0]['LVDT_1(Micron)'] && data[0]['LVDT_1(Micron)'][index],
+           LVDT_2: data[0]['LVDT_2(Micron)'] && data[0]['LVDT_2(Micron)'][index],
+           LVDT_3: data[0]['LVDT_3(Micron)'] && data[0]['LVDT_3(Micron)'][index],
+           LVDT_4: data[0]['LVDT_4(Micron)'] && data[0]['LVDT_4(Micron)'][index],
+         }));
+         console.log("flatten",flattenedData) 
+        setReceivedData(
+          flattenedData
+        );
+       console.log("received inside",receivedData)
+        // Do something with the data
+      } catch (error) {
+        console.error("error caused here", error);
+        // Handle errors
+      }
+    }
+
+    fetchData();
+    
+  }, []);
   const distanceFilterTemplate = (options)=>{
     
     return  <InputNumber
@@ -49,15 +82,16 @@ const CsvFileData = () => {
 
 
  
-  return (
+  return (<div>
     <div className="min-h-screen backgroundImage ">
       <div className="flex justify-end ">
-        <Link
-          to={`/graph/${id}`}
-          className="btn btn-success btn-sm px-3 py-2 mt-5 mr-8"
-        >
-          Show graph
-        </Link>
+      <button
+            className="btn btn-success btn-sm px-3 py-2 mt-5 mr-8"
+            onClick={ButtonClick}
+          >
+            Show graph
+            
+          </button>
       </div>
       <div className="flex flex-col justify-center items-center  ">
         <div className="mt-10 ">
@@ -71,13 +105,13 @@ const CsvFileData = () => {
             </CSVLink>
           </div>
           <DataTable
-            value={flattenedData}
-            // paginator
-            // rows={1}
-            // rowsPerPageOptions={[1,5, 10, 25, 50]}
+            value={receivedData}
+            paginator
+            rows={10}
+            rowsPerPageOptions={[1,5, 10, 25, 50]}
           >
             <Column
-              field="Angle(Deg) "
+              field="angle"
               header="Angle"
               sortable
               dataType="numeric"
@@ -86,7 +120,7 @@ const CsvFileData = () => {
               filterElement={distanceFilterTemplate}
             />
             <Column
-              field="LVDT_1(Micron)"
+              field="LVDT_1"
               header="LVDT 1"
               sortable
               dataType="numeric"
@@ -95,7 +129,7 @@ const CsvFileData = () => {
               filterElement={distanceFilterTemplate}
             />
             <Column
-              field="LVDT_2(Micron)"
+              field="LVDT_2"
               header="LVDT 2"
               sortable
               dataType="numeric"
@@ -104,7 +138,7 @@ const CsvFileData = () => {
               filterElement={distanceFilterTemplate}
             />
             <Column
-              field="LVDT_3(Micron)"
+              field="LVDT_3"
               header="LVDT 3"
               sortable
               dataType="numeric"
@@ -113,7 +147,7 @@ const CsvFileData = () => {
               filterElement={distanceFilterTemplate}
             />
             <Column
-              field="LVDT_4(Micron)"
+              field="LVDT_4"
               header="LVDT 4"
               sortable
               dataType="numeric"
@@ -124,6 +158,8 @@ const CsvFileData = () => {
           </DataTable>
         </div>
       </div>
+    </div>
+    {clicked && originaldata && <Graph data={originaldata} />}
     </div>
   );
 };

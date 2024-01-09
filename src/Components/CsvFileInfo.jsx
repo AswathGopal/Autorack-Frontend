@@ -6,7 +6,8 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { InputNumber } from "primereact/inputnumber";
-import PostReq from "./PostReq";
+import {modifyTimestamp1} from "./UtcToIst";
+
 const CsvFileInfo = () => {
  const { id } = useParams();
   
@@ -20,18 +21,31 @@ const CsvFileInfo = () => {
   const [receivedData, setReceivedData] = useState([]);
   const [Loading, setLoading] = useState(false);
   
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     console.log(RodData);
     const formData = new FormData();
     formData.append("cmpserialno",id)
-    formData.append("SerialNo", RodData.serialNo);
+    formData.append("SerialNo", RodData.serialnumber);
     formData.append("DateFrom", RodData.DateFrom);
     formData.append("DateTo", RodData.DateTo);
     formData.append("TimeFrom", RodData.TimeFrom);
     formData.append("TimeTo", RodData.TimeTo);
     console.log(formData);
-    setReceivedData(PostReq("fetch-csv-file-info/", formData))
+    const resp= await fetch("http://localhost:8000/apis/fetch-csv-file-info/",{
+      method: "post",
+      body: formData
+    })
+    const data=await resp.json()
+    if (Array.isArray(data)) {
+      data.forEach((item) => {
+        if (item.creation_time) {
+          item.creation_time = modifyTimestamp1(item.creation_time);
+        }
+      });
+    }
+    setReceivedData(data)
+    console.log(data);
     setLoading(true);
   }
    const [filters, setFilters] = useState({
