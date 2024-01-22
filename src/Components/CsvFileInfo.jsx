@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Link ,useParams} from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { InputNumber } from "primereact/inputnumber";
 import {modifyTimestamp1} from "./UtcToIst";
 
@@ -19,7 +18,7 @@ const CsvFileInfo = () => {
     TimeTo: "",
   });
   const [receivedData, setReceivedData] = useState([]);
-  const [Loading, setLoading] = useState(false);
+  const [clicked, setClicked] = useState(false);
   
   const handleSubmit =async (e) => {
     e.preventDefault();
@@ -45,15 +44,11 @@ const CsvFileInfo = () => {
       });
     }
     setReceivedData(data)
+    setClicked(true)
     console.log(data);
-    setLoading(true);
   }
-   const [filters, setFilters] = useState({
-     distance: {
-       operator: FilterOperator.AND,
-       constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-     },
-   });
+
+
    const actionTemplate = (rowData) => {
     const id = rowData.csv_file_serial_num;
      return (
@@ -65,7 +60,9 @@ const CsvFileInfo = () => {
        </Link>
      );
    };
-     const distanceFilterTemplate = (options) => {
+
+
+     const FilterTemplate = (options) => {
        return (
          <InputNumber
            style={{
@@ -84,7 +81,7 @@ const CsvFileInfo = () => {
     <div className="min-h-screen backgroundImage">
       <div className="flex flex-col justify-center items-center  ">
         <div className="p-3 rounded w-50">
-          <h3 className="text-center">ROD INFORMATION</h3>
+          <h3 className="text-center">CSV_FILE INFORMATION</h3>
           <form className="row gap-1" onSubmit={handleSubmit}>
             <div className="">
               <label htmlFor="name" className="font-semibold form-label">
@@ -168,11 +165,11 @@ const CsvFileInfo = () => {
           </form>
         </div>
         <div className="mt-3 mb-5 ">
-          {Loading &&(<DataTable
+          {clicked &&(<DataTable
             value={receivedData}
-            // paginator
-            // rows={1}
-            // rowsPerPageOptions={[1,5, 10, 25, 50]}
+            paginator
+            rows={10}
+            rowsPerPageOptions={[1,5, 10, 25, 50,100]}
           >
             <Column
               field="csv_file_serial_num"
@@ -192,7 +189,7 @@ const CsvFileInfo = () => {
               dataType="numeric"
               style={{ minWidth: "10rem" }}
               filter
-              filterElement={distanceFilterTemplate}
+              filterElement={FilterTemplate}
               sortable
               className="border-b px-4"
             />
@@ -203,7 +200,7 @@ const CsvFileInfo = () => {
               dataType="numeric"
               style={{ minWidth: "10rem" }}
               filter
-              filterElement={distanceFilterTemplate}
+              filterElement={FilterTemplate}
               sortable
             />
             <Column
@@ -213,7 +210,7 @@ const CsvFileInfo = () => {
               dataType="numeric"
               style={{ minWidth: "10rem" }}
               filter
-              filterElement={distanceFilterTemplate}
+              filterElement={FilterTemplate}
               sortable
             />
             <Column

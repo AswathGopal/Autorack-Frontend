@@ -1,5 +1,5 @@
 import './style.css'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useState} from 'react';
 import { Link } from 'react-router-dom';
 import { DataTable } from "primereact/datatable";
@@ -16,7 +16,8 @@ const RodInfo = () => {
         TimeTo:""
     });
     const [receivedData,setReceivedData]= useState([])
-    const [Loading,setLoading] = useState(false)
+    const [clicked, setClicked] = useState(false);
+
     async function handleSubmit(e) {
       e.preventDefault();
       console.log(RodData);
@@ -41,10 +42,10 @@ const RodInfo = () => {
         });
       }
       setReceivedData(data)
+      setClicked(true)
     }
-    useEffect(()=>{
-      console.log("printed "+receivedData);
-    },[receivedData])
+
+
     const actionTemplate = (rowData) => {
       const id = rowData.component_serial_num;
       return (
@@ -56,9 +57,11 @@ const RodInfo = () => {
         </Link>
       );
     };
+
+
   return (
     <div className="min-h-screen backgroundImage">
-      <div className="flex flex-col justify-center items-center   ">
+      <div className="flex flex-col justify-center items-center">
         <div className="p-3 rounded w-50">
           <h3 className="text-center">ROD INFORMATION</h3>
           <form className="row gap-1" onSubmit={handleSubmit}>
@@ -143,17 +146,17 @@ const RodInfo = () => {
           </form>
         </div>
         <div className="mt-3 mb-5 ">
-         <DataTable
+         {clicked &&(<DataTable
             value={receivedData}
-            // paginator
-            // rows={1}
-            // rowsPerPageOptions={[1,5, 10, 25, 50]}
+            paginator
+            rows={10}
+            rowsPerPageOptions={[1,5, 10, 25, 50,100]}
           >
             <Column field="component_serial_num" header="ID" sortable />
             <Column field="start_time" header="Start Time" sortable />
             <Column field="end_time" header="End time" sortable />
             <Column header="Action" body={actionTemplate}></Column>
-          </DataTable>    
+          </DataTable>)}    
         </div>
       </div>
     </div>

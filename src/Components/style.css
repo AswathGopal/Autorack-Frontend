@@ -6,3 +6,7 @@
     /* max-height: fit-content; */
     /* z-index: -1; */
 }
+
+.element {
+    will-change: transform;
+}
