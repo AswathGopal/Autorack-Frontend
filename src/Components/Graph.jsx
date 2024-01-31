@@ -5,11 +5,11 @@ const Graph = (props) => {
   const data= props.data
      const parsedData = data.map((item) => {
       return {
-        angle: item['Angle(Deg)'].map((value) => parseInt(value, 10)),
-        lvdt_1: item['LVDT_1(Micron)'].map((value) => parseInt(value, 10)),
-        lvdt_2: item['LVDT_2(Micron)'].map((value) => parseInt(value, 10)),
-        lvdt_3: item['LVDT_3(Micron)'].map((value) => parseInt(value, 10)),
-        lvdt_4: item['LVDT_4(Micron)'].map((value) => parseInt(value, 10)),
+        angle: item['Angle(Deg) '].map((value) => parseInt(value, 10)),
+        lvdt_1: item['Bend_1(Micron)'].map((value) => parseInt(value, 10)),
+        lvdt_2: item['Bend_2(Micron)'].map((value) => parseInt(value, 10)),
+        lvdt_3: item['Bend_3(Micron)'].map((value) => parseInt(value, 10)),
+        lvdt_4: item['Bend_4(Micron)'].map((value) => parseInt(value, 10)),
       };
     });
    const findMaxBendPerLVDT = (parsedData) => {

@@ -47,12 +47,12 @@ const CsvFileData = () => {
            return;
          }
 
-         const flattenedData = data[0]['Angle(Deg)'].map((_, index) => ({
-           angle: data[0]['Angle(Deg)'][index],
-           LVDT_1: data[0]['LVDT_1(Micron)'] && data[0]['LVDT_1(Micron)'][index],
-           LVDT_2: data[0]['LVDT_2(Micron)'] && data[0]['LVDT_2(Micron)'][index],
-           LVDT_3: data[0]['LVDT_3(Micron)'] && data[0]['LVDT_3(Micron)'][index],
-           LVDT_4: data[0]['LVDT_4(Micron)'] && data[0]['LVDT_4(Micron)'][index],
+         const flattenedData = data[0]['Angle(Deg) '].map((_, index) => ({
+           angle: data[0]['Angle(Deg) '][index],
+           LVDT_1: data[0]['Bend_1(Micron)'] && data[0]['Bend_1(Micron)'][index],
+           LVDT_2: data[0]['Bend_2(Micron)'] && data[0]['Bend_2(Micron)'][index],
+           LVDT_3: data[0]['Bend_3(Micron)'] && data[0]['Bend_3(Micron)'][index],
+           LVDT_4: data[0]['Bend_4(Micron)'] && data[0]['Bend_4(Micron)'][index],
          }));
         setReceivedData(flattenedData);
       } catch (error) {
