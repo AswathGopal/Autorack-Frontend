@@ -36,10 +36,10 @@ const RodComponentTrigger = () => {
         Component Triggering
       </span>
       <div className='flex justify-center items-center mt-5'>
-      {startData &&<span className={`data-text flex justify-center items-center font-bold text-3xl mt-2 font-serif ${startData ? 'fade-in' : ''}`}>
+      {startData &&<span className="data-text flex justify-center items-center font-bold text-3xl mt-2 font-serif ">
         {startData}
       </span>}
-      {endData &&<span  className={`data-text flex justify-center items-center font-bold text-3xl mt-2 font-serif ${endData ? 'fade-in' : ''}`}>
+      {endData &&<span  className="data-text flex justify-center items-center font-bold text-3xl mt-2 font-serif ">
         {endData}
       </span>}
       </div>
