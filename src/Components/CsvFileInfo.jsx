@@ -1,3 +1,4 @@
+//importing necessary packages.
 import "./style.css";
 import React from "react";
 import { useState } from "react";
@@ -9,7 +10,7 @@ import {modifyTimestamp1} from "./UtcToIst";
 
 const CsvFileInfo = () => {
  const { id } = useParams();
-  
+  //setting of state variables.
   const [RodData, setRodData] = useState({
     serialnumber: "",
     DateFrom: "",
@@ -19,7 +20,8 @@ const CsvFileInfo = () => {
   });
   const [receivedData, setReceivedData] = useState([]);
   const [clicked, setClicked] = useState(false);
-  
+
+  //snippet of code that sends data to the backend. It sends data in formdata object
   const handleSubmit =async (e) => {
     e.preventDefault();
     console.log(RodData);
@@ -36,6 +38,7 @@ const CsvFileInfo = () => {
       body: formData
     })
     const data=await resp.json()
+   //converting received time which is in gmt format to ist format.
     if (Array.isArray(data)) {
       data.forEach((item) => {
         if (item.creation_time) {
@@ -43,12 +46,13 @@ const CsvFileInfo = () => {
         }
       });
     }
+   //updating state values.
     setReceivedData(data)
     setClicked(true)
     console.log(data);
   }
 
-
+// adding a link button to naviagte to other page.
    const actionTemplate = (rowData) => {
     const id = rowData.csv_file_serial_num;
      return (
@@ -61,7 +65,7 @@ const CsvFileInfo = () => {
      );
    };
 
-
+// adding filter options using react prime table concepts.
      const FilterTemplate = (options) => {
        return (
          <InputNumber
@@ -82,6 +86,7 @@ const CsvFileInfo = () => {
       <div className="flex flex-col justify-center items-center  ">
         <div className="p-3 rounded w-50">
           <h3 className="text-center">CSV_FILE INFORMATION</h3>
+         {/*handilng a form to get input from the users.*/}
           <form className="row gap-1" onSubmit={handleSubmit}>
             <div className="">
               <label htmlFor="name" className="font-semibold form-label">
@@ -164,6 +169,7 @@ const CsvFileInfo = () => {
             </div>
           </form>
         </div>
+       {/* now adding react prime table which provides inbuilt table component. */}
         <div className="mt-3 mb-5 ">
           {clicked &&(<DataTable
             value={receivedData}
