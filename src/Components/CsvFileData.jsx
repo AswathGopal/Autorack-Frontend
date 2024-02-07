@@ -1,3 +1,4 @@
+// import all necessary files
 import "./style.css";
 import React from "react";
 import { useState,useEffect } from "react";
@@ -12,12 +13,13 @@ import {
   scroller,
 } from "react-scroll";
 const CsvFileData = () => {
+  // setting the required state
   const [clicked,setClicked]=useState(false)
   const [originaldata, setoriginalData] = useState([]);
   const { id } = useParams();
   const [receivedData, setReceivedData] = useState([]);
   
-  
+  // it is used for scrolling of the data
   const ButtonClick=()=>{
   setClicked(true)
    scroller.scrollTo("scroll-to-element", {
@@ -27,7 +29,7 @@ const CsvFileData = () => {
    });
 }
  
- 
+ // useeffect is used to receive data from the backend once the component mounts
   useEffect(() => {
     async function fetchData() {
       try {
@@ -46,7 +48,7 @@ const CsvFileData = () => {
            console.error("Invalid data structure");
            return;
          }
-
+          //the received data is flattened into array of objects
          const flattenedData = data[0]['Angle(Deg) '].map((_, index) => ({
            angle: data[0]['Angle(Deg) '][index],
            LVDT_1: data[0]['Bend_1(Micron)'] && data[0]['Bend_1(Micron)'][index],
@@ -63,7 +65,7 @@ const CsvFileData = () => {
     fetchData();
   }, []);
 
-
+// it is used for the filtering of the data.
   const FilterTemplate = (options)=>{
       return  <InputNumber
           style={{
@@ -92,6 +94,7 @@ const CsvFileData = () => {
         <div className="flex flex-col justify-center items-center  ">
           <div className="mt-10 mb-20 ">
             <div className="btn btn-success btn-sm py-2 px-4 text-white mb-4">
+              {/* here csv file is allowed to download*/}
               <CSVLink
                 data={receivedData}
                 className="text-white"
@@ -100,6 +103,7 @@ const CsvFileData = () => {
                 Download csv
               </CSVLink>
             </div>
+            {/*creating a prime table to display values.*/}
             <DataTable
               value={receivedData}
               paginator
@@ -155,6 +159,7 @@ const CsvFileData = () => {
           </div>
         </div>
       </div>
+      {/*after clicking grpah data it will scroll here and render the graph component.*/}
       <Element  name="scroll-to-element" className="element">
         {clicked && originaldata && <Graph data={originaldata} />}
       </Element>
