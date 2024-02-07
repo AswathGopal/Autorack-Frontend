@@ -1,3 +1,4 @@
+//it is the home where the route pages are added.
 import React from "react";
 import RodInfo from "./Components/RodInfo";
 import CsvFileInfo from "./Components/CsvFileInfo"
@@ -9,6 +10,7 @@ function App() {
     <div>
       <BrowserRouter>
       <Routes>
+        {/*adding routes*/}
         <Route path='/' element={<RodComponentTrigger/>}/>
         <Route path='/rodinfo' element={<RodInfo/>}></Route>
         <Route path="/csvfileinfo/:id" element={<CsvFileInfo/>}></Route>
