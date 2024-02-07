@@ -1,7 +1,9 @@
+//importing necessary react library
 import React from 'react'
 import { Line } from 'react-chartjs-2'
 import "chart.js/auto"
 const Graph = (props) => {
+  // parsing the data as input is obtained as json string value
   const data= props.data
      const parsedData = data.map((item) => {
       return {
@@ -12,6 +14,7 @@ const Graph = (props) => {
         lvdt_4: item['Bend_4(Micron)'].map((value) => parseInt(value, 10)),
       };
     });
+  //writing a logic to find maximum bend in the angle
    const findMaxBendPerLVDT = (parsedData) => {
      let maxBends = [];
      let maxAngles = [];
@@ -44,6 +47,7 @@ const Graph = (props) => {
    const { maxBends, maxAngles } = findMaxBendPerLVDT(parsedData);
    
     const state = {
+      //setting of labels and dataset value to be plotted.
       labels: parsedData[0].angle,
       datasets: [
         {
@@ -95,6 +99,7 @@ const Graph = (props) => {
     };
     
   return (
+    {/* here we pass state as input to the data as well as we have wriiten options to be displayed here*/}
     <div className="flex justify-center items-center mt-10  min-h-screen">
       <Line
         data={state}
